@@ -104,7 +104,18 @@ EOF
                 /run/s6/basedir/bin/halt
                 exit 1
             fi
-            # finally create ALREADY_INITED flag file
+            
+			
+			# create moon file
+			zerotier-idtool initmoon /var/lib/zerotier-one/identity.public > moon.json
+			chmod 777 moon.json
+			stableEndpoints="[\"${MYADDR}/9993\"]"
+			sed -i "s#\[\]#${stableEndpoints}#g" moon.json
+			zerotier-idtool genmoon moon.json
+			cp -f ./*.moon /opt/key-networks/ztncui/etc/httpfs
+			echo "moon successfully generated."
+			
+			# finally create ALREADY_INITED flag file
             echo "mkworld successfully ran."
             touch /etc/zt-mkworld/ALREADY_INITED
             exit 0
