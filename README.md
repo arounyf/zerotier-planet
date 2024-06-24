@@ -99,9 +99,6 @@ runyf/ztncui-aio:v1.14.0
 ```
 ## 支持使用本地持久存储的配置
 
-关于: https://github.com/key-networks/ztncui
-
-
 在创建容器时，根据需要设置以下环境变量:
 
 | 必需 | 参数名 | 描述 | 默认值 |
@@ -116,16 +113,13 @@ runyf/ztncui-aio:v1.14.0
 
 这个应用程序没有内置的保护机制，防止暴力攻击，你不应该直接暴露在互联网上。个人建议还是弄个https比较好
 
-你最好不要使用弱密码.
-
-在创建容器时，根据需要设置以下环境变量:   
+你最好不要使用弱密码
 
 | 必需 | 参数名 | 描述 | 默认值 |
 |:--------:|:--------:|:--------:|:--------:|
 | no | MYDOMAIN | 用于生成TLS证书  | ztncui.docker.test |
 | no | ZTNCUI_PASSWD | 生成登录密码 | password |
 | YES | MYADDR | 你的服务器IP地址 | 无默认 |
-
 
 
 **警告:如果您没有设置密码，您必须使用' docker容器日志<CONTAINER_NAME / CONTAINER_ID> '来获取您的随机密码。
