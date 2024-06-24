@@ -140,5 +140,6 @@ runyf/ztncui-aio:v1.14.0
 
 脚本使用 https://ip.sb 获取你服务器的ip地址, 它可能会无法访问. 对于这种情况, 程序使用 `ifconfig`工具检测你的服务器ip, 但是可能会出错, 你可以设置 `MYADDR` 参数在容器启动的时候
 
-**本仓库为(https://github.com/kmahyyg/ztncui-aio)的分支，并将说明文档翻译成了中文。但是最重要的是本仓库经过我修改了部分代码支持自动创建Moon文件。你也可以访问我的博客获取ztncui-aio的更多信息： https://www.runyf.cn/archives/451/
+**本仓库为(https://github.com/kmahyyg/ztncui-aio)的分支。
+并将说明文档翻译成了中文。但是最重要的是本仓库经过我修改了部分代码支持自动创建Moon文件。你也可以访问我的博客获取ztncui-aio的更多信息： (https://www.runyf.cn/archives/451/)
 
