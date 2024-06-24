@@ -98,7 +98,7 @@ $ docker run -d -p3180:3180  -p3000:3000 -p9993:9993/udp \
   --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun \
   --name ztncui \
 runyf/ztncui-aio:v1.14.0
-
+```
 ## 支持使用本地持久存储的配置
 
 关于: https://github.com/key-networks/ztncui
@@ -114,38 +114,39 @@ runyf/ztncui-aio:v1.14.0
 | no | HTTP_PORT | HTTP_PORT | 3000 |
 | no | HTTP_ALL_INTERFACES | 使用方向代理监听所以端口, 仅HTTP | NO DEFAULT |
 
-Note: If you do NOT set `HTTP_ALL_INTERFACES`, the 3000 port will only get listened inside container, means `127.0.0.1:3000` by default.
+注意: 如果你不设置 `HTTP_ALL_INTERFACES`, 3000端口只能在容器内部访问, 意味着监听 `127.0.0.1:3000`(默认，不推荐).
 
-This application does NOT have a built-in protection mechanism against brute-force attack, you should NOT directly expose it on the internet.
+这个应用程序没有内置的保护机制，防止暴力攻击，你不应该直接暴露在互联网上。个人建议还是弄个https比较好
 
-And you should ALWAYS NOT use a weak password.
+你最好不要使用弱密码.
 
-Set the following environment variable when create the container, and according to your needs:
+在创建容器时，根据需要设置以下环境变量:   
 
-| MANDATORY | Name | Explanation | Default Value |
+| 必需 | 参数名 | 描述 | 默认值 |
 |:--------:|:--------:|:--------:|:--------:|
-| no | MYDOMAIN | generate TLS certs on the fly (if not exists) | ztncui.docker.test |
-| no | ZTNCUI_PASSWD | generate admin password on the fly (if not exists) | password |
-| YES | MYADDR | your ip address, public ip address preferred, will auto-detect if not set | NO DEFAULT |
+| no | MYDOMAIN | 用于生成TLS证书  | ztncui.docker.test |
+| no | ZTNCUI_PASSWD | 生成登录密码 | password |
+| YES | MYADDR | 你的服务器IP地址 | 无默认 |
 
 
-**WARNING: IF YOU DO NOT SET PASSWORD, YOU HAVE TO USE `docker container logs <CONTAINER_NAME / CONTAINER_ID>` to get your random password. This is a gatekeeper.**
 
-To reset password of ztncui: delete file under `/mydata/ztncui/passwd` and set the environment variable to the password you want, then re-create the container. After application has been initialized, the password should ONLY be changed from the web page.
+**警告:如果您没有设置密码，您必须使用' docker容器日志<CONTAINER_NAME / CONTAINER_ID> '来获取您的随机密码。
 
-## Public File Server
+要重置ztncui的密码:删除' /mydata/ztncui/passwd '下的文件，并将ZTNCUI_PASSWD参数设置为您想要的密码，然后重新创建容器。应用程序初始化后，只能从web页面更改密码。
 
-| MANDATORY | Name | Explanation | Default Value |
+## 文件服务
+
+| 必需 | 参数名 | 描述 | 默认值 |
 |:--------:|:--------:|:--------:|:--------:|
-| no | PLANET_RETR_PUBLIC | File server listened globally or only local | NO DEFAULT |
+| no | PLANET_RETR_PUBLIC | 文件服务器监听配置 | NO DEFAULT |
 
-If `PLANET_RETR_PUBLIC` is set, then file server will listen on `0.0.0.0`, otherwise, `127.0.0.1` .
-This image exposed an http server at port 3180, you could save file in `/mydata/ztncui/httpfs/` to serve it. 
-(You could use this to build your own root server and distribute planet file, even though, that won't hurt you, I still suggest to set a protection for both http servers in front.)
+如果设置了 `PLANET_RETR_PUBLIC`, 文件服务监听 `0.0.0.0`, 反之, `127.0.0.1`    
+这个开启了一个端口为3180的http服务器，代理目录为' /mydata/ztncui/httpfs/'   
+您可以使用它来构建自己的根服务器并分发行星文件和Moon文件
 
-## Chinese users only
+## 中国的用户需要注意
 
-This script use https:///ip.sb for public IP detection purpose, which is blocked in some area of China Mainland. Under this circumstance, the program will try to detect public IP using `ifconfig` tool and might lead to unwanted result, to prevent this, make sure you set `MYADDR` environment variable when docker container is up.
+脚本使用 https://ip.sb 获取你服务器的ip地址, 它可能会无法访问. 对于这种情况, 程序使用 `ifconfig`工具检测你的服务器ip, 但是可能会出错, 你可以设置 `MYADDR` 参数在容器启动的时候
 
-**This repo (https://github.com/kmahyyg/ztncui-aio) only accept Issues and PRs in English. Other languages will be closed directly without any further notice. If you come from some non-English countries, use Google Translate, and state that at the beginning of the text body.**
+**本仓库为(https://github.com/kmahyyg/ztncui-aio)的分支，并将说明文档翻译成了中文。但是最重要的是本仓库经过我修改了部分代码支持自动创建Moon文件。你也可以访问我的博客获取ztncui-aio的更多信息： https://www.runyf.cn/archives/451/
 
