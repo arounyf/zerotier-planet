@@ -1,49 +1,52 @@
 # ztncui-aio
 
-![](https://github.com/kmahyyg/ztncui-aio/actions/workflows/docker4commit.yml/badge.svg)
+[![docker workflow](https://github.com/fredliang44/derper-docker/actions/workflows/docker-image.yml/badge.svg)](https://hub.docker.com/r/runyf/ztncui-aio)
+[![docker pulls](https://img.shields.io/docker/pulls/runyf/derper.svg?color=brightgreen)](https://hub.docker.com/r/runyf/ztncui-aio)
+[![platfrom](https://img.shields.io/badge/platform-amd64%20%7C%20arm64-brightgreen)](https://hub.docker.com/r/runyf/ztncui-aio/tags)
 
-Current Version: 20240503-1.12.2-0.8.14
 
-## From ztncui author
+ZeroTier当前版本: 1.14.0
 
-Say a huge thank you to their work!
+## 关于ztncui作者
 
-### ZeroTier network controller user interface in a Docker container
+对他们的工作表示衷心的感谢!
 
-This is to build a Docker image that contains **[ZeroTier One](https://www.zerotier.com/download.shtml)** and **[ztncui](https://key-networks.com/ztncui)** to set up a **standalone ZeroTier network controller** with a web user interface in a container.
+### ZeroTier 网络控制器用户界面-Docker容器
 
-Follow us on [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)
+这是一个构建 **[ZeroTier One](https://www.zerotier.com/download.shtml)** 和 **[ztncui](https://key-networks.com/ztncui)** 的Docker镜像，用于启动 **standalone ZeroTier network controller** 带有用户管理界面的容器
+
+关于key_networks [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)
 
 Licensed Under GNU GPLv3
 
-## Build yourself
+## 构建你自己的镜像
 
-We support aarch64 (arm64/v8), amd64 by default. 
+支持 aarch64 (arm64/v8), amd64 (默认). 
 
-Armv7(means armhf) might work, but is not tested. 
+Armv7(means armhf) 应该也可以, 但是没有经过测试. 
 
-Others are unsupported.
+其它架构不支持.
 
 ```bash
-$ git clone https://github.com/kmahyyg/ztncui-aio
+$ git clone https://github.com/runyf/ztncui-aio
 $ docker build . --build-arg OVERLAY_S6_ARCH=<one of aarch64,x86_64> -t ghcr.io/kmahyyg/ztncui-aio:latest
 ```
 
-> Why not directly detect CPU arch? Some kernel may use non-standard expression of architecture.
+> 为什么不知道识别系统架构? 有些内核提供的查询方法可能不标准.
 
-Change `NODEJS_MAJOR` variable in Dockerfile to use different nodejs version.
+可以更改 `NODEJS_MAJOR`变量在Dockerfile以便使用不退的 nodejs 版本.
 
-Never use `node_lts.x` as your installation script of nodejs whose version might changed without further notice due to time shift.
+一定不要使用`node_lts.x` 作为你的nodejs的安装脚本，它的版本可能会因为时间的变化而改变而没有进一步的通知.
 
-## Usage
+## 使用
 
-### Golang auto-mkworld (already embedded in docker image)
+### Golang auto-mkworld (已经内置在容器中)
 
-This feature allows you to generate a planet file without using C code and compiler.
+这个特性允许你在不使用编译器的情况下生成行星文件   
 
-Also, due to limitation of IPC of Zerotier-One UI and multiple issues, we do NOT support customized port, you can ONLY use port 9993/udp here.
+另外，由于zero - tier- one UI的IPC限制和多种问题，我们不支持自定义端口，这里只能使用9993/udp端口。   
 
-Set the following environment variable when create the container, and according to your needs:
+在创建容器时，根据需要设置以下环境变量:
 
 | MANDATORY | Name | Explanation | Default Value |
 |:--------:|:--------:|:--------:|:--------:|
