@@ -21,22 +21,22 @@ Licensed Under GNU GPLv3
 
 ## 构建你自己的镜像
 
-支持 aarch64 (arm64/v8), amd64 (默认). 
+支持 aarch64 (arm64/v8), amd64 (默认)
 
-Armv7(means armhf) 应该也可以, 但是没有经过测试. 
+Armv7(means armhf) 应该也可以, 但是没有经过测试
 
-其它架构不支持.
+其它架构不支持
 
 ```bash
 $ git clone https://github.com/runyf/ztncui-aio
 $ docker build . --build-arg OVERLAY_S6_ARCH=<one of aarch64,x86_64> -t ghcr.io/kmahyyg/ztncui-aio:latest
 ```
 
-> 为什么不知道识别系统架构? 有些内核提供的查询方法可能不标准.
+> 为什么不知道识别系统架构? 有些内核提供的查询方法可能不标准
 
-可以更改 `NODEJS_MAJOR`变量在Dockerfile以便使用不退的 nodejs 版本.
+可以更改 `NODEJS_MAJOR`变量在Dockerfile以便使用不退的 nodejs 版本
 
-一定不要使用`node_lts.x` 作为你的nodejs的安装脚本，它的版本可能会因为时间的变化而改变而没有进一步的通知.
+一定不要使用`node_lts.x` 作为你的nodejs的安装脚本，它的版本可能会因为时间的变化而改变而没有进一步的通知
 
 ## 使用
 
@@ -48,69 +48,71 @@ $ docker build . --build-arg OVERLAY_S6_ARCH=<one of aarch64,x86_64> -t ghcr.io/
 
 在创建容器时，根据需要设置以下环境变量:
 
-| MANDATORY | Name | Explanation | Default Value |
+| 必需 | 参数名| 描述 | 默认值 |
 |:--------:|:--------:|:--------:|:--------:|
-| no | AUTOGEN_PLANET | If set to 1, will use this node identity to generate a `planet` file and put to `httpfs` folder to serve it outside. If set to 2, will use config in `/etc/zt-mkworld/mkworld.config.json`. If set to 0, will do nothing. | 0 |
+| no | AUTOGEN_PLANET | 如果将值设置为1将自动生成planet和moon文件。默认为0，它将使用官方的planet的文件，就是说使用这个值搭建出来的仅仅是一个网络控制器+UI。 如果设置为2, 则使用此配置 `/etc/zt-mkworld/mkworld.config.json`.  | 0 |
 
-The reference config file can be found on `ztnodeid/assets/mkworld.conf.json`. 
+参考配置文件可以在“ztnodeid/assets/mkworld.conf.json”中找到。
 
-You could also define yourself, and check the stdout output to get C header of customized planet. After that, you will find the custom planet file under http file server root and also ca certificate.
+您也可以自己定义，并检查stdout输出以获得自定义行星文件。之后，您将在http文件服务器根目录下找到自定义行星文件和ca证书。
 
-The configuration JSON can be understand like this:
+JSON配置描述:
 
 ```json
 {
-    "rootNodes": [   // array of node, can be multiple
+    "rootNodes": [   // 节点数组，可以是多个
         {
-            "comments": "amsterdam official",   // node object, comment, will auto generate if AUTOGEN_PLANET=1
+            "comments": "amsterdam official",   // 节点对象，如果AUTOGEN_PLANET=1，将自动生成
             "identity": "992fcf1db7:0:206ed59350b31916f749a1f85dffb3a8787dcbf83b8c6e9448d4e3ea0e3369301be716c3609344a9d1533850fb4460c50af43322bcfc8e13d3301a1f1003ceb6",  
-            // node identity.public ^^ , if node is not initialized, will initialize at the container start
+            // node identity.public ^^ , 如果节点没有初始化，将在容器启动时初始化
             "endpoints": [
-                "195.181.173.159/443",   // node service location, in format: ip/port, will auto generate if AUTOGEN_PLANET=1
-                "2a02:6ea0:c024::/443"   // must be less than or equal to two endpoints, one for IPv4, one for IPv6. if you have multiple IP, set multiple node with different identity.
+                "195.181.173.159/443",   // 如果AUTOGEN_PLANET=1，将自动生成格式为ip/port的值
+                "2a02:6ea0:c024::/443"   // 必须小于或等于两个端点，一个用于IPv4，一个用于IPv6。如果有多个IP，请设置多个不同身份的节点。
             ]
         }
     ],
     "signing": [
-        "previous.c25519",   // planet signing key, if not exist, will generate
-        "current.c25519"   // same, used for iteration and update
+        "previous.c25519",   // planet签名密钥，如果不存在，将生成
+        "current.c25519"   // 同上，用于迭代和更新
     ],
-    "output": "planet.custom",   // output filename
-    "plID": 0,    // planet numeric ID, if you don't know, do not modify, and set plRecommend to true
-    "plBirth": 0,  // planet creation timestamp, if you don't know, do not modify, and set plRecommend to true
-    "plRecommend": true  // set plRecommend to true, auto-recommend plID, plBirth value. For more details, read mkworld source code in zerotier-one official repo
+    "output": "planet.custom",   // 输出文件名
+    "plID": 0,    // 行星数字ID，如果你不知道，不要修改，并设置plRecommend为true
+    "plBirth": 0,  // 行星创建时间戳，如果不知道，请勿修改，并将plRecommend设置为true
+    "plRecommend": true  // 设置plRecommend为true时，自动生成plID、plBirth的值。要了解更多细节，请阅读zerotier-one官方repo中的mkworld源代码
 }
 ```
 
 ### Docker image
 
 ```bash
-$ git clone https://github.com/kmahyyg/ztncui-aio # to get a copy of denv file, otherwise make your own
-$ docker pull ghcr.io/kmahyyg/ztncui-aio
-$ docker run -d -p3443:3443 -p3180:3180 -p9993:9993/udp \
-    -v /mydata/ztncui:/opt/key-networks/ztncui/etc \
-    -v /mydata/zt1:/var/lib/zerotier-one \
-    -v /mydata/zt-mkworld-conf:/etc/zt-mkworld \
-    --env-file ./denv <CHANGE THIS FILE ACCORDING TO NEXT PART> \
-    --restart always \
-    --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun \
-    --name ztncui \
-    ghcr.io/kmahyyg/ztncui-aio # /mydata above is the data folder that you use to save the supporting files
-```
+$ docker pull runyf/ztncui-aio
+$ docker run -d -p3180:3180  -p3000:3000 -p9993:9993/udp \
+  -v ~/ztncui/etc:/opt/key-networks/ztncui/etc \
+  -v ~/ztncui/zt1:/var/lib/zerotier-one \
+  -v ~/ztncui/zt-mkworld-conf:/etc/zt-mkworld \
+  -e ZTNCUI_PASSWD=password \
+  -e AUTOGEN_PLANET=1 \
+  -e PLANET_RETR_PUBLIC=true \
+  -e HTTP_ALL_INTERFACES=true \
+  --restart always \
+  --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun \
+  --name ztncui \
+runyf/ztncui-aio:v1.14.0
 
-## Supported Configuration using local persistent storage
+## 支持使用本地持久存储的配置
 
-For ZTNCUI: https://github.com/key-networks/ztncui
+关于: https://github.com/key-networks/ztncui
 
-Set the following environment variable when create the container, and according to your needs:
 
-| MANDATORY | Name | Explanation | Default Value |
+在创建容器时，根据需要设置以下环境变量:
+
+| 必需 | 参数名 | 描述 | 默认值 |
 |:--------:|:--------:|:--------:|:--------:|
 | YES | NODE_ENV | https://pugjs.org/api/express.html | production |
 | no | HTTPS_HOST | HTTPS_HOST | NO DEFAULT, MEANS DISABLED |
 | no | HTTPS_PORT | HTTPS_PORT | NO DEFAULT, MEANS DISABLED |
 | no | HTTP_PORT | HTTP_PORT | 3000 |
-| no | HTTP_ALL_INTERFACES | Listen on all interfaces, useful for reverse proxy, HTTP only | NO DEFAULT |
+| no | HTTP_ALL_INTERFACES | 使用方向代理监听所以端口, 仅HTTP | NO DEFAULT |
 
 Note: If you do NOT set `HTTP_ALL_INTERFACES`, the 3000 port will only get listened inside container, means `127.0.0.1:3000` by default.
 
