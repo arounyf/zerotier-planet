@@ -9,15 +9,13 @@ ZeroTier当前版本: 1.14.0
 
 ## 关于ztncui作者
 
-对他们的工作表示衷心的感谢!
+对他们的工作表示衷心的感谢!   
+关于key_networks [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)   
+Licensed Under GNU GPLv3   
 
-### ZeroTier 网络控制器用户界面-Docker容器
+### ZeroTier 网络控制器+UI (也可以把它叫成Planet服务器)
 
-这是一个构建 **[ZeroTier One](https://www.zerotier.com/download.shtml)** 和 **[ztncui](https://key-networks.com/ztncui)** 的Docker镜像，用于启动 **standalone ZeroTier network controller** 带有用户管理界面的容器
-
-关于key_networks [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)
-
-Licensed Under GNU GPLv3
+这是一个构建 **[ZeroTier One](https://www.zerotier.com/download.shtml)** 和 **[ztncui](https://key-networks.com/ztncui)** 的Docker镜像，用于启动 **ZeroTier网络控制器+UI**
 
 ## 构建你自己的镜像
 
