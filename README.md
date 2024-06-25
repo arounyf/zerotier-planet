@@ -7,15 +7,6 @@
 
 ZeroTier当前版本: 1.14.0
 
-## 关于ztncui作者
-
-对他们的工作表示衷心的感谢!   
-关于key_networks [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)   
-Licensed Under GNU GPLv3   
-
-### ZeroTier 网络控制器+UI (也可以把它叫成Planet服务器)
-
-这是一个构建 **[ZeroTier One](https://www.zerotier.com/download.shtml)** 和 **[ztncui](https://key-networks.com/ztncui)** 的Docker镜像，用于启动 **ZeroTier网络控制器+UI**
 
 ## 构建你自己的镜像
 
@@ -30,11 +21,6 @@ $ git clone https://github.com/runyf/ztncui-aio
 $ docker build . --build-arg OVERLAY_S6_ARCH=<one of aarch64,x86_64> -t ghcr.io/kmahyyg/ztncui-aio:latest
 ```
 
-> 为什么不知道识别系统架构? 有些内核提供的查询方法可能不标准
-
-可以更改 `NODEJS_MAJOR`变量在Dockerfile以便使用不退的 nodejs 版本
-
-一定不要使用`node_lts.x` 作为你的nodejs的安装脚本，它的版本可能会因为时间的变化而改变而没有进一步的通知
 
 ## 使用
 
