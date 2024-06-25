@@ -66,7 +66,7 @@ JSON配置描述:
 }
 ```
 
-### Docker image
+### Docker启动命令
 
 ```bash
 $ docker pull runyf/ztncui-aio
