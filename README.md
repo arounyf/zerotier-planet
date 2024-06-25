@@ -17,7 +17,7 @@ Armv7(means armhf) 应该也可以, 但是没有经过测试
 其它架构不支持
 
 ```bash
-$ git clone https://github.com/runyf/ztncui-aio
+$ git clone https://github.com/arounyf/ztncui-aio.git
 $ docker build . --build-arg OVERLAY_S6_ARCH=<one of aarch64,x86_64> -t runyf/ztncui-aio:latest
 ```
 
